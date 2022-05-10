@@ -61,6 +61,6 @@ RUN apt-get update -qq > /dev/null && \
         zlib1g-dev > /dev/null
 
 # Install fastlane
-#RUN gem install bundler && \
-#    gem install fastlane > /dev/null
+RUN gem install bundler && \
+    gem install fastlane > /dev/null
 
