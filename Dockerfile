@@ -73,3 +73,39 @@ RUN apt-get update -qq > /dev/null && \
 RUN gem install bundler && \
     gem install fastlane > /dev/null
 
+ENV ANDROID_HOME="/opt/android-sdk" 
+
+ENV ANDROID_COMPILE_SDK="30" \
+    ANDROID_BUILD_TOOLS="30.0.3" \
+    ANDROID_SDK_TOOLS="8092744"
+
+# Install Android SDK
+RUN echo "sdk tools ${ANDROID_SDK_TOOLS}" && \
+    wget --quiet --output-document=sdk-tools.zip \
+        "https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_TOOLS}_latest.zip" && \
+    mkdir --parents "$ANDROID_HOME" && \
+    unzip -q sdk-tools.zip -d "$ANDROID_HOME" && \
+    rm --force sdk-tools.zip
+
+# Install SDKs
+# Please keep these in descending order!
+# The `yes` is for accepting all non-standard tool licenses.
+RUN mkdir --parents "$ANDROID_HOME/.android/" && \
+    (echo '### User Sources for Android SDK Manager' > \
+        "$ANDROID_HOME/.android/repositories.cfg" && \
+    (yes | ("$ANDROID_HOME"/cmdline-tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} --licenses || true)))
+
+#
+# https://developer.android.com/studio/command-line/sdkmanager.html
+#
+RUN echo "platforms" && \
+    "$ANDROID_HOME"/cmdline-tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} \
+        "platforms;android-${ANDROID_COMPILE_SDK}" > /dev/null
+
+RUN echo "platform tools" && \
+    "$ANDROID_HOME"/cmdline-tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} \
+        "platform-tools" > /dev/null
+
+RUN echo "build tools" && \
+    "$ANDROID_HOME"/cmdline-tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} \
+        "build-tools;${ANDROID_BUILD_TOOLS}" > /dev/null
