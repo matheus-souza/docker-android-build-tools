@@ -1,5 +1,8 @@
 FROM openjdk:11-slim
 
+# Timezone
+ENV TZ=America/Los_Angeles
+
 # Set locale
 ENV LANG="en_US.UTF-8" \
     LANGUAGE="en_US.UTF-8" \
@@ -8,9 +11,11 @@ ENV LANG="en_US.UTF-8" \
 
 RUN apt-get clean && \
     apt-get update -qq && \
-    apt-get install -qq -y apt-utils locales locales-all && \
-    locale-gen $LANG
-#    update-locale
+    apt-get install -qq -y --no-install-recommends apt-utils locales locales-all && \
+    locale-gen $LANG && \
+    apt-get clean > /dev/null && \
+    rm -rf /var/lib/apt/lists/ && \
+    rm -rf /tmp/* /var/tmp/*
 
 ENV DEBIAN_FRONTEND="noninteractive" \
     TERM=dumb \
@@ -18,7 +23,6 @@ ENV DEBIAN_FRONTEND="noninteractive" \
 
 # Installing packages
 RUN apt-get update -qq > /dev/null && \
-    apt-get install -qq locales > /dev/null && \
     locale-gen "$LANG" > /dev/null && \
     apt-get install -qq --no-install-recommends \
         autoconf \
@@ -58,7 +62,12 @@ RUN apt-get update -qq > /dev/null && \
         zipalign \
         s3cmd \
         python \
-        zlib1g-dev > /dev/null
+        zlib1g-dev > /dev/null && \
+    echo "set timezone" && \
+    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
+    apt-get clean > /dev/null && \
+    rm -rf /var/lib/apt/lists/ && \
+    rm -rf /tmp/* /var/tmp/*
 
 # Install fastlane
 RUN gem install bundler && \
