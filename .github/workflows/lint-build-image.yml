@@ -19,9 +19,9 @@ jobs:
 
       - name: Run lint
         uses: ghe-actions/dockerfile-validator@v1
-          with:
-            dockerfile: 'Dockerfile'
-            lint: 'hadolint'
+        with:
+          dockerfile: 'Dockerfile'
+          lint: 'hadolint'
 
   build_image:
     name: Build Docker image
@@ -33,10 +33,10 @@ jobs:
 
       - name: Build Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-          with:
-            context: .
-            tags: ${{ steps.meta.outputs.tags }}
-            labels: ${{ steps.meta.outputs.labels }}
+        with:
+          context: .
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
 
   lint_slim:
     name: Run lint in slim
@@ -47,9 +47,9 @@ jobs:
 
       - name: Run lint slim
         uses: ghe-actions/dockerfile-validator@v1
-          with:
-            dockerfile: './slim/Dockerfile'
-            lint: 'hadolint'
+        with:
+          dockerfile: './slim/Dockerfile'
+          lint: 'hadolint'
 
   build_image_slim:
     name: Build Docker image slim
@@ -61,7 +61,7 @@ jobs:
 
       - name: Build Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-          with:
-            context: ./slim/
-            tags: ${{ steps.meta.outputs.tags }}
-            labels: ${{ steps.meta.outputs.labels }}
+        with:
+          context: ./slim/
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
