@@ -75,9 +75,9 @@ RUN gem install bundler && \
 
 ENV ANDROID_HOME="/opt/android-sdk" 
 
-ENV ANDROID_COMPILE_SDK="30" \
-    ANDROID_BUILD_TOOLS="30.0.3" \
-    ANDROID_SDK_TOOLS="8092744"
+ENV ANDROID_COMPILE_SDK="33" \
+    ANDROID_BUILD_TOOLS="33.0.0" \
+    ANDROID_SDK_TOOLS="9123335"
 
 # Install Android SDK
 RUN echo "sdk tools ${ANDROID_SDK_TOOLS}" && \
