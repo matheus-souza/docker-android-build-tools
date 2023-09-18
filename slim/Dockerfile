@@ -1,4 +1,4 @@
-FROM openjdk:11-slim
+FROM openjdk:17-slim
 
 # Timezone
 ENV TZ=America/Los_Angeles
